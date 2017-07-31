@@ -42,7 +42,8 @@ int main(void){
 				}
 				count++;
 			}
-			cout << "You tried " << MAX_FAIL_NUMBER << " times, game over" << endl;
+			if(ret > 0)
+				cout << "You tried " << MAX_FAIL_NUMBER << " times, game over" << endl;
 			break;
 		}else{
 			cout << "wrong option" << endl;

@@ -2,7 +2,7 @@
 #include "masterMind.h"
 using namespace masterMindSpace;
 
-//direction 0 parse self generated code, direction 1 parse code from player
+//direction 0 parse self generated code, direction 1 parse guessed code from player
 masterMind::Color masterMind::parseCode(int direction, int index){
 	int count = 0;
 	string code = "";
@@ -41,28 +41,38 @@ int masterMind::generateReply(){
 	int whiteCount = 0;
 	int blackCount = 0;
 	unordered_map<Color, int, EnumClassHash> tmpMap = codeMap;
+	Color tmpGuessArray[4];
+
+	for(i=0; i<4; i++){
+		tmpGuessArray[i] = guessArray[i];
+	}
 	//find if any code in correct color and position
 	for(i=0; i<4; i++){
-		if(codeArray[i] == guessArray[i]){
+		if(codeArray[i] == tmpGuessArray[i]){
 			blackCount++;
-			if(tmpMap.count(guessArray[i]) && tmpMap[guessArray[i]] > 0){
-			tmpMap[guessArray[i]]--;
+#ifdef DEBUG
+			cout << "guess index: " << i << " guess color: " << (int)tmpGuessArray[i] << " code color: "<< (int)codeArray[i] <<" blackCount ++" << endl;
+#endif	
+			if(tmpMap.count(tmpGuessArray[i]) && tmpMap[tmpGuessArray[i]] > 0){
+				tmpMap[tmpGuessArray[i]]--;
 			}else{
 				cout << "number of color is not consistent, game stopped" << endl;
 				return -1;
 			}
+			//matched color in guess array don't need to be examined again.
+			tmpGuessArray[i] = masterMind::Color::MATCHED;
 		}
 	}
 	//find if any code in correct color but wrong position
 	for(i=0; i<4; i++){
-		if((codeArray[0] == guessArray[i] && tmpMap.count(guessArray[i]) && tmpMap[guessArray[i]]  > 0) || (codeArray[1] == guessArray[i] && tmpMap.count(guessArray[i]) && tmpMap[guessArray[i]] > 0)
-			   || (codeArray[2] == guessArray[i] && tmpMap.count(guessArray[i]) && tmpMap[guessArray[i]] > 0) 
-			   || (codeArray[3] == guessArray[i] && tmpMap.count(guessArray[i]) && tmpMap[guessArray[i]] > 0)){
+		if((codeArray[0] == tmpGuessArray[i] && tmpMap.count(tmpGuessArray[i]) && tmpMap[tmpGuessArray[i]]  > 0) || (codeArray[1] == tmpGuessArray[i] && tmpMap.count(tmpGuessArray[i]) && tmpMap[tmpGuessArray[i]] > 0)
+			   || (codeArray[2] == tmpGuessArray[i] && tmpMap.count(tmpGuessArray[i]) && tmpMap[tmpGuessArray[i]] > 0) 
+			   || (codeArray[3] == tmpGuessArray[i] && tmpMap.count(tmpGuessArray[i]) && tmpMap[tmpGuessArray[i]] > 0)){
 			whiteCount++;
 #ifdef DEBUG
-			cout << "guess index: " << i << " color: " << (int)guessArray[i] << " whiteCount ++" << endl;
+			cout << "guess index: " << i << " guess color: " << (int)tmpGuessArray[i] << " code color: "<< (int)codeArray[i] <<" whiteCount ++" << endl;
 #endif	
-			tmpMap[guessArray[i]]--;
+			tmpMap[tmpGuessArray[i]]--;
 		}	
 	}
 

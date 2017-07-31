@@ -22,7 +22,7 @@ namespace masterMindSpace{
 		public: int guessCode();
 				int generateCode();
 				int showGameInfo();
-		private: enum class Color {NO_MATCH = 0, RED, BLUE, YELLOW, WHITE, BROWN, GREEN};
+		private: enum class Color {NO_MATCH = 0, RED, BLUE, YELLOW, WHITE, BROWN, GREEN, MATCHED};
 				 Color codeArray[4];
 				 Color guessArray[4];
 				 unordered_map<Color, int, EnumClassHash> codeMap;
